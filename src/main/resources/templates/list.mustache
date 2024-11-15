@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>blog</title>
+</head>
+<body>
+
+<nav> <!-- 헤더가 네비게이션 역할을 할거니까 -->
+    <ul> <!-- 헤더 -->
+        <li>
+            <a href="#">홈</a>
+        </li>
+        <li>
+            <a href="#">글쓰기</a>
+        </li>
+    </ul>
+</nav>
+
+<hr> <!-- 줄긋기 -->
+
+<section>
+    <table border="1"> <!-- 표 -->
+        <tr>
+            <!-- 표의 헤더 -->
+            <th>번호</th>
+            <th>제목</th>
+        </tr>
+
+        <!-- mustache파일에서의 for-each문 -->
+        <!-- models는 BoardController에서 지정한 request의 키값(순회할 게시글List) -->
+        {{#models}}
+        <tr>
+            <!-- 표의 바디 -->
+            <td>{{id}}</td> <!-- Board의 필드 들고오기 -->
+            <td>{{title}}</td>
+            <td><a href="/board/{{id}}">상세보기</a></td>
+        </tr>
+        {{/models}}
+    </table>
+</section>
+
+</body>
+</html>
