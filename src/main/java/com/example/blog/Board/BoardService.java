@@ -18,14 +18,24 @@ public class BoardService {
 
     public List<BoardResponce.DTO> 게시글목록보기() {
 
+        // BoardResponce 클래스의 static 클래스 DTO라서 BoardResponce.DTO로 가져올 수 있음
         List<BoardResponce.DTO> dtos = new ArrayList<>();
 
         List<Board> boardList = boardRepository.findAll();
 
+        // boardList를 순회해서 DTO 클래스의 필드(필요한 정보만 선언해둠)를 dtos 리스트에 add
+        // => 깊은 복사
         for (Board board : boardList) {
             BoardResponce.DTO dto = new BoardResponce.DTO(board);
             dtos.add(dto);
         }
         return dtos;
+    }
+
+    public BoardResponce.DetailsDTO 게시글상세보기(int id) {
+
+        Board board = boardRepository.findById(id);
+
+        return new BoardResponce.DetailsDTO(board);
     }
 }

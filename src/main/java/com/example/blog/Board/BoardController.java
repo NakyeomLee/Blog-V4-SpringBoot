@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -33,6 +34,14 @@ public class BoardController {
         model.addAttribute("models", boardList);
 
         // 파일명만 적어놓으면 view resolver가 .mustache파일을 templates에서 찾아냄
-        return "list";  
+        return "list"; // view
+    }
+
+    @GetMapping("/board/{id}")
+    public String ViewDetails(@PathVariable int id, Model model) {
+        BoardResponce.DetailsDTO boardDetails = boardService.게시글상세보기(id);
+        model.addAttribute("detailModels", boardDetails);
+
+        return "viewDetails"; // view
     }
 }

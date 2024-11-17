@@ -24,4 +24,8 @@ public class BoardRepository {
         // q.getResultList() : 컬렉션(List)로 알아서 받아줌
         return q.getResultList();
     }
+
+    public Board findById(int id) {
+        return em.find(Board.class, id);
+    }
 }
