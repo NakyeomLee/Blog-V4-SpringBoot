@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 public class Board {
     @Id // PK 설정 (이 경우 id 컬럼이 PK(기본키))
     @GeneratedValue(strategy = GenerationType.IDENTITY) // AutoIncrement
-    private int id; // 게시글 번호
+    private Integer id; // 게시글 번호 , null일 경우를 대비해서 Integer
     private String title; // 게시글 제목
     private String content; // 게시글 내용
     private Timestamp createdAt; // 작성 날짜

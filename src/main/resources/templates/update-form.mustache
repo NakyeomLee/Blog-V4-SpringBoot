@@ -1,7 +1,8 @@
 {{> layout/header}}
 
 <section>
-    <form action="/board/save" method="post" enctype="application/x-www-form-urlencoded">
+    <form action="/board/{{modle.id}}/update" method="post" enctype="application/x-www-form-urlencoded">
+        <input type="text" value="{{model.id}}"><br>
         <input type="text" name="id" placeholder="제목"><br>
         <input type="text" name="title" placeholder="제목"><br>
         <input type="text" name="content" placeholder="내용"><br>

@@ -18,6 +18,14 @@ public class BoardRepository {
     // JPA는 EntityManager로 DB에 접근(Java에서의 DBConnection)
     private final EntityManager em;
 
+    public void update(int id, String title, String content) {
+        Query q = em.createNativeQuery("update board_tb set title=?, content=? where id=?");
+        q.setParameter(1, title);
+        q.setParameter(2, content);
+        q.setParameter(3, id);
+        q.executeUpdate();
+    }
+
     // 1118 글삭제
     public void delete(int id) {
         Query q = em.createNativeQuery("delete from board_tb where id=?");

@@ -1,5 +1,6 @@
 package com.example.blog.Board;
 
+import com.example.blog._core.Encoding;
 import lombok.Data;
 
 import java.sql.Timestamp;

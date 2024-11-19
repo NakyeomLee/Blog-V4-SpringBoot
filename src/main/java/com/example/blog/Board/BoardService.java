@@ -46,7 +46,7 @@ public class BoardService {
     }
 
     @Transactional
-    public void 게시글쓰기(BoardResponce.SaveDTO saveDTO) {
+    public void 게시글쓰기(BorderRequest.SaveDTO saveDTO) {
         boardRepository.save(saveDTO.getTitle(), saveDTO.getContent());
     } // commit
 
@@ -54,4 +54,10 @@ public class BoardService {
     public void 게시글삭제(int id) {
         boardRepository.delete(id);
     } // commit or rollback 이 됨
+
+    @Transactional // 잘되면 commit, 예외발생해서 터지면 rollback
+    public void 게시글수정하기(int id, BorderRequest.UpdateDTO updateDTO) {
+        // 1.
+        boardRepository.update(id, updateDTO.getTitle(), updateDTO.getContent());
+    }
 }
