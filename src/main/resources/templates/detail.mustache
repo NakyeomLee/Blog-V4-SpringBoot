@@ -1,0 +1,26 @@
+{{> layout/header}}
+
+<section>
+<!--    <div>-->
+<!--        번호 : 1 <br>-->
+<!--        제목 : 제목1 <br>-->
+<!--        내용 : 내용1 <br>-->
+<!--        작성일 : 2024.11.18 <br>-->
+<!--    </div>-->
+    <!-- http 1.0버전으로 만듬. 자바스크립트 없이 사용하기 위해서 -->
+    <form action="/board/{{model.id}}/delete" method="post">
+        <button type="submit">삭제</button>
+    </form>
+    <form action="/board/{{model.id}}/update-form" method="post">
+        <button type="submit">수정</button>
+    </form>
+    <div>
+        번호 : {{model.id}} <br>
+        제목 : {{model.title}} <br>
+        내용 : {{model.content}} <br>
+        작성일 : {{model.createdAt}} <br>
+    </div>
+</section>
+
+</body>
+</html>

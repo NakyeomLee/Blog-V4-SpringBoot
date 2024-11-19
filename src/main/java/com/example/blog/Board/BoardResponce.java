@@ -6,6 +6,54 @@ import java.sql.Timestamp;
 
 public class BoardResponce {
 
+    //1118 수정
+    @Data
+    public static class UpdateFormDTO {
+        private int id;
+        private String title;
+        private String content;
+        private String createdAt;
+
+        public UpdateFormDTO(Board board) {
+            this.id = board.getId();
+            this.title = board.getTitle();
+            this.content = board.getContent();
+            this.createdAt = Encoding.formatToStr(board);
+        }
+    }
+
+    //1118 삭제
+    @Data
+    public static class DetailDTO {
+        private int id;
+        private String title;
+        private String content;
+        private String createdAt;
+
+        public DetailDTO(Board board) {
+            this.id = board.getId();
+            this.title = board.getTitle();
+            this.content = board.getContent();
+            // Encoding클래스의 날짜변환 메서드 가져와 적용
+            this.createdAt = Encoding.formatToStr(board);
+        }
+    }
+
+    // 1118 쓰기
+    @Data
+    public static class SaveDTO {
+        private int id;
+        private String title;
+        private String content;
+
+        public SaveDTO(Board board) {
+            this.id = board.getId();
+            this.title = board.getTitle();
+            this.content = board.getContent();
+        }
+    }
+
+
     // static이라서 바로 new 할 수 있음 => BoardResponce.DTO
     @Data // getter,setter 다 포함돼있음
     public static class DTO {
@@ -17,20 +65,6 @@ public class BoardResponce {
         public DTO(Board board) {
             this.id = board.getId();
             this.title = board.getTitle();
-        }
-    }
-
-    @Data
-    public static class DetailsDTO {
-        private String title; // 게시글 제목
-        private String content; // 게시글 내용
-        private Timestamp createdAt; // 작성 날짜
-
-        // 생성자
-        public DetailsDTO(Board board) {
-            this.title = board.getTitle();
-            this.content = board.getContent();
-            this.createdAt = board.getCreatedAt();
         }
     }
 }
