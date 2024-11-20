@@ -1,11 +1,12 @@
 {{> layout/header}}
 
 <section>
-    <form action="/board/{{modle.id}}/update" method="post" enctype="application/x-www-form-urlencoded">
-        <input type="text" value="{{model.id}}"><br>
-        <input type="text" name="id" placeholder="제목"><br>
-        <input type="text" name="title" placeholder="제목"><br>
-        <input type="text" name="content" placeholder="내용"><br>
+    <!-- name에 적어야 값이 넘어간다 -->
+    <form action="/board/{{model.id}}/update" method="post" enctype="application/x-www-form-urlencoded">
+        <input type="text" value="{{model.id}}" readonly="true"><br>
+        <input type="text" name="title" value="{{model.title}}"><br>
+        <input type="text" name="content" value="{{model.content}}"><br>
+        <input type="text" value="{{model.createdAt}}" readonly="true"><br>
         <button type="submit">글쓰기</button>
     </form>
 </section>

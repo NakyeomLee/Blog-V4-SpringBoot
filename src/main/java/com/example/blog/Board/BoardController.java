@@ -24,7 +24,7 @@ public class BoardController {
     // 1119 글수정
     @PostMapping("/board/{id}/update")
     public String update(@PathVariable int id, BoardRequest.UpdateDTO updateDTO) {
-//        boardService.게시글수정하기(id, updateDTO);
+        boardService.게시글수정하기(id, updateDTO);
 
         return "redirect:/board/" + id; // 수정할 게시글 상세보기로 리다이렉트
     }
