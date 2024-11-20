@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 
@@ -19,5 +20,11 @@ public class Board {
     private Integer id; // 게시글 번호 , null일 경우를 대비해서 Integer
     private String title; // 게시글 제목
     private String content; // 게시글 내용
+    @CreationTimestamp
     private Timestamp createdAt; // 작성 날짜
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

@@ -25,14 +25,17 @@ public class BoardService {
     }
 
     public BoardResponce.UpdateFormDTO 게시글수정화면보기(int id) {
-        Board board = boardRepository.findById(id); // 바로 return 불가능>DTO
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 id의 게시글이 없습니다. : " + id));
+
         return new BoardResponce.UpdateFormDTO(board);
     }
 
     // 진행방향: 다같이 모든 화면을 만들고(vs코드로) > 코드 세분화함(순서대로 / 거꾸로)
     // 선생님 추천(반대로) 1.레 2.컨 3.서
     public BoardResponce.DetailDTO 게시글상세보기(int id) {
-        Board board = boardRepository.findById(id); // 바로 return 불가능>DTO
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 id의 게시글이 없습니다. : " + id));
         return new BoardResponce.DetailDTO(board);
     }
 
@@ -48,7 +51,11 @@ public class BoardService {
 
     @Transactional // 잘되면 commit, 예외발생해서 터지면 rollback
     public void 게시글수정하기(int id, BoardRequest.UpdateDTO updateDTO) {
-        // 1.
-        boardRepository.update(id, updateDTO.getTitle(), updateDTO.getContent());
+        // 게시글 조회
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 id의 게시글이 없습니다. : " + id));
+        
+        board.update(updateDTO.getTitle(), updateDTO.getContent());
+        // 영속화된 객체 상태 변경 - update + commit => 더티 체킹
     }
 }
