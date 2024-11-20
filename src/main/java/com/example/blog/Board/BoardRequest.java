@@ -2,7 +2,7 @@ package com.example.blog.Board;
 
 import lombok.Data;
 
-public class BorderRequest {
+public class BoardRequest {
 
     @Data
     public static class  UpdateDTO {
@@ -15,15 +15,9 @@ public class BorderRequest {
         private String title;
         private String content;
 
-        // toString 형태 -롬북 사용시 자동 출력되어 필요없다.
-        // 구조만 확인하기
-/*        @Override
-         public String toString() {
-            return "SaveDTO{" +
-                    "title='" + title + '\'' +
-                    ", content='" + content + '\'' +
-                    '}';
+        public Board toEntity() {
+            Board board = new Board(null, title, content, null);
+            return board;
         }
- */
     }
 }

@@ -23,8 +23,8 @@ public class BoardController {
     
     // 1119 글수정
     @PostMapping("/board/{id}/update")
-    public String update(@PathVariable int id, BorderRequest.UpdateDTO updateDTO) {
-        boardService.게시글수정하기(id, updateDTO);
+    public String update(@PathVariable int id, BoardRequest.UpdateDTO updateDTO) {
+//        boardService.게시글수정하기(id, updateDTO);
 
         return "redirect:/board/" + id; // 수정할 게시글 상세보기로 리다이렉트
     }
@@ -53,7 +53,7 @@ public class BoardController {
     // 1118 글쓰기 (String일 경우)
     // x-www는 클래스로 받을 수 있다 -요청DTO생성
     @PostMapping("/board/save")
-    public String save(BorderRequest.SaveDTO saveDTO, HttpServletResponse response) throws IOException {
+    public String save(BoardRequest.SaveDTO saveDTO) {
         System.out.println(saveDTO); // @Data는 내부에 String을 재정의해서 구현해준다(자동 호출)
         boardService.게시글쓰기(saveDTO);
         return "redirect:/"; // 게시글 목록보기로 리다이렉트

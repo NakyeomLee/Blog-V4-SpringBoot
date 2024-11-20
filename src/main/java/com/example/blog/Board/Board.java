@@ -1,14 +1,15 @@
 package com.example.blog.Board;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
-// 빈(기본,디폴트) 생성자 (롬복 사용)
-// DB에서 조회해서 가져온 RS(ResultSet)를 디폴트 생성자를 호출해서 new하고 값을 채워줌
-@NoArgsConstructor
+
+@AllArgsConstructor // 풀 생성자
+@NoArgsConstructor // 빈(기본,디폴트) 생성자 (롬복 사용), DB에서 조회해서 가져온 RS(ResultSet)를 디폴트 생성자를 호출해서 new하고 값을 채워줌
 @Getter // getter (롬복 사용)
 @Table(name = "board_tb") // 해당 엔티티가 매핑되는 테이블 이름 지정
 @Entity // 이 클래스를 엔티티(모델)로 지정, DB테이블에 매핑될 수 있게 함
