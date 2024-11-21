@@ -1,6 +1,6 @@
 package com.example.blog.Board;
 
-import com.example.blog._core.Encoding;
+import com.example.blog._core.util.Encoding;
 import lombok.Data;
 
 public class BoardResponce {

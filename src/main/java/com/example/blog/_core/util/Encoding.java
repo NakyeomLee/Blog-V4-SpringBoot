@@ -1,4 +1,4 @@
-package com.example.blog._core;
+package com.example.blog._core.util;
 
 import com.example.blog.Board.Board;
 

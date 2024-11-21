@@ -1,14 +1,15 @@
 package com.example.blog.Board;
 
-import jakarta.servlet.http.HttpServletResponse;
+import com.example.blog._core.error.ex.Exception400;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor // final이 붙어있는 필드에 대한 생성자를 만들어줌
@@ -23,7 +24,15 @@ public class BoardController {
     
     // 1119 글수정
     @PostMapping("/board/{id}/update")
-    public String update(@PathVariable int id, BoardRequest.UpdateDTO updateDTO) {
+    public String update(@PathVariable("id") int id, @Valid BoardRequest.UpdateDTO updateDTO, Errors errors) {
+
+        if (errors.hasErrors()) { // 에러를 가졌는가?
+
+            String errMsg = errors.getFieldErrors().get(0).getField() + " : "
+                    + errors.getFieldErrors().get(0).getDefaultMessage();
+            throw new Exception400(errMsg);
+        }
+
         boardService.게시글수정하기(id, updateDTO);
 
         return "redirect:/board/" + id; // 수정할 게시글 상세보기로 리다이렉트
@@ -36,15 +45,15 @@ public class BoardController {
         return "redirect:/"; // 메인(게시글 리스트)으로 리다이렉트
     }
 
-    // 1118 글수정
+    // 1118 글수정 폼 나타내기
     @GetMapping("/board/{id}/update-form")
-    public String updateForm(@PathVariable("id") int id, Model model) {
+    public String updateForm(@PathVariable("id") Integer id, Model model) {
         BoardResponce.UpdateFormDTO updateFormDTO = boardService.게시글수정화면보기(id);
         model.addAttribute("model", updateFormDTO);
         return "update-form"; // view
     }
 
-    // 1118 글쓰기
+    // 1118 글쓰기 폼 나타내기
     @GetMapping("/board/save-form")
     public String saveForm() {
         return "save-form"; // view
@@ -52,9 +61,18 @@ public class BoardController {
 
     // 1118 글쓰기 (String일 경우)
     // x-www는 클래스로 받을 수 있다 -요청DTO생성
+    // @Valid : 해당 클래스 찾아내서 유효성 검사
+    // Errors : 에러들을 다 담고 있음
     @PostMapping("/board/save")
-    public String save(BoardRequest.SaveDTO saveDTO) {
-        System.out.println(saveDTO); // @Data는 내부에 String을 재정의해서 구현해준다(자동 호출)
+    public String save(@Valid BoardRequest.SaveDTO saveDTO, Errors errors) {
+
+        if (errors.hasErrors()) { // 에러를 가졌는가?
+
+            String errMsg = errors.getFieldErrors().get(0).getField() + " : "
+                    + errors.getFieldErrors().get(0).getDefaultMessage();
+            throw new Exception400(errMsg);
+        }
+
         boardService.게시글쓰기(saveDTO);
         return "redirect:/"; // 게시글 목록보기로 리다이렉트
     }
@@ -82,7 +100,7 @@ public class BoardController {
      쿼리스트링과 패스변수를 적절히 혼합하여 사용
      */
     @GetMapping("/board/{id}") // 중괄호있으면,
-    public String detail(@PathVariable("id") int id, Model model) { // 어노테이션 vaule값 필요
+    public String detail(@PathVariable("id") Integer id, Model model) { // 어노테이션 vaule값 필요
         // model을 리퀘스트 객체에 넣어야 꺼내 쓰기 편함 > Model model 추가
         BoardResponce.DetailDTO boardDetail = boardService.게시글상세보기(id);
         model.addAttribute("model", boardDetail);

@@ -1,5 +1,6 @@
 package com.example.blog.Board;
 
+import com.example.blog._core.error.ex.Exception404;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class BoardService {
 
     public BoardResponce.UpdateFormDTO 게시글수정화면보기(int id) {
         Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("해당 id의 게시글이 없습니다. : " + id));
+                .orElseThrow(() -> new Exception404("해당 id의 게시글이 없습니다. : " + id));
 
         return new BoardResponce.UpdateFormDTO(board);
     }
@@ -39,7 +40,7 @@ public class BoardService {
         // .orElseThrow : 예외처리를 정확하게 할 수있게 길 안내(명시적으로 안내)
         // 데이터 무결성을 최대화하고 변수를 최소화하기위해서
         Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("해당 id의 게시글이 없습니다. : " + id));
+                .orElseThrow(() -> new Exception404("해당 id의 게시글이 없습니다. : " + id));
         return new BoardResponce.DetailDTO(board);
     }
 
@@ -57,7 +58,7 @@ public class BoardService {
     public void 게시글수정하기(int id, BoardRequest.UpdateDTO updateDTO) {
         // 게시글 조회
         Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("해당 id의 게시글이 없습니다. : " + id));
+                .orElseThrow(() -> new Exception404("해당 id의 게시글이 없습니다. : " + id));
         
         board.update(updateDTO.getTitle(), updateDTO.getContent());
         // 영속화된 객체 상태 변경 - update + commit => 더티 체킹
