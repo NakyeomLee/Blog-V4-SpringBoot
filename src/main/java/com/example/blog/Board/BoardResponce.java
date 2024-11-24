@@ -3,6 +3,7 @@ package com.example.blog.Board;
 import com.example.blog._core.util.Encoding;
 import lombok.Data;
 
+// 여러 개의 DTO 객체를 관리하기 위해 BoardResponse 클래스 작성
 public class BoardResponce {
 
     //1118 수정
@@ -27,7 +28,7 @@ public class BoardResponce {
         private int id;
         private String title;
         private String content;
-        private String createdAt;
+        private String createdAt; // Timestamp인데 string으로 해도 된다.
 
         public DetailDTO(Board board) {
             this.id = board.getId();
@@ -62,6 +63,18 @@ public class BoardResponce {
         // 생성자
         // 깊은 복사를 위해 Board를 매개 변수로 이용 => Board의 모든 것을 들고옴
         public DTO(Board board) {
+            this.id = board.getId();
+            this.title = board.getTitle();
+        }
+    }
+
+    @Data // Getter, Setter 필요
+    public static class ReadDTO {
+        // BoardResponse.DTO 로 쓰기 위해 static으로 올리는 것
+        private int id;
+        private String title;
+
+        public ReadDTO(Board board) {
             this.id = board.getId();
             this.title = board.getTitle();
         }

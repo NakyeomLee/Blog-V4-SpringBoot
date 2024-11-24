@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>blog</title>
+</head>
+
+<body>
+
+    <nav>
+        <ul>
+            <li>
+                <a href="javascript:void(0);" onclick="renderList()">홈</a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" onclick="renderSaveForm()">글쓰기</a>
+            </li>
+        </ul>
+    </nav>
+
+    <hr>
+
+    <section id="root">
+        
+    </section>
+
+    <script>
+        // init
+        let root = document.querySelector("#root");
+        renderList(); 
+
+        // list 디자인 뼈대만 생성
+        function renderList() {
+            clear();
+            let dom = `
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>제목</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="list-box">
+                    
+                    </tbody>
+                </table>                
+            `;
+            root.innerHTML = dom;
+            sendList();
+        }
+
+        // item 생성
+        function renderListItem(board) {
+            let dom = `                
+                    <td>${board.id}</td>
+                    <td>${board.title}</td>
+                    <td><a href="javascript:void(0);" onclick="renderDetail(${board.id})">상세보기</a></td>                       
+            `;
+            let item = document.createElement("tr"); // <tr>태그 생성
+            item.innerHTML = dom;
+            return item;            
+        }
+        
+        async function sendList() {
+            // 1. 사용자 입력값 받기 -> 필요 없다.
+
+            // 2. JSON 변환 -> 필요 없다.
+
+            // 3. API 요청, 조회 코드는 아래 2줄이 1쌍이다.
+            let response = await fetch("http://localhost:8080/api");
+            // 여기도 await 필요한 이유는 .json() 자체가 비동기 함수이기 때문이다.
+            // json으로 그림 같이 무거운 자료를 주고 받을 때 json 문자열로 바꾸는데 시간이 오래 걸릴 수도 있어서
+            let responseBody = await response.json(); 
+
+            // 4. 응답 처리
+            let boards = responseBody.body;
+
+            let listBox = document.querySelector("#list-box");
+            boards.forEach(board => {
+                let item = renderListItem(board);
+                listBox.append(item);
+            });
+        }
+
+        // detail 디자인
+        async function renderDetail(id) {
+            clear();
+            let board = await sendDetail(id); // sendDetail이 async 함수니까 여기도 await 필요
+            let dom = `
+                <form>
+                    <button type="button" onclick="sendDelete(${board.id})">삭제</button>
+                </form>
+                <form>
+                    <button type="button" onclick="renderUpdateForm(${board.id})">수정</button>
+                </form>
+                <div>
+                    번호 : ${board.id} <br>
+                    제목 : ${board.title} <br>
+                    내용 : ${board.content} <br>
+                    작성일 : ${board.createdAt} <br>
+                </div>
+            `;
+            root.innerHTML = dom;
+        }
+
+        async function sendDetail(id) {
+            // 1. 사용자 입력값 받기
+
+            // 2. JSON 변환
+
+            // 3. API 요청
+            // ${id} 쓰려면 백틱 써야한다.
+            let response = await fetch(`http://localhost:8080/api/board/${id}`);            
+            let responseBody = await response.json();
+            console.log(responseBody); 
+
+            // 4. 응답 처리
+            let body = responseBody.body;
+            return body;
+        }
+
+        // saveForm 디자인
+        function renderSaveForm() {
+            clear();
+            let dom = `
+                <form>
+                    <input type="text" id="title" placeholder="제목"><br>
+                    <input type="text" id="content" placeholder="내용"><br>
+                    <button type="button" onclick="sendSave()">글쓰기</button>
+                </form>        
+            `;
+            root.innerHTML = dom;
+        }
+
+        function sendSave() {
+            // 1. 사용자 입력값 받기
+
+            // 2. JSON 변환
+
+            // 3. API 요청
+
+            // 4. 응답 처리
+        }
+
+        function sendDelete() {
+            // 1. 사용자 입력값 받기
+
+            // 2. JSON 변환
+
+            // 3. API 요청
+
+            // 4. 응답 처리
+        }
+
+        function sendUpdate() {
+            // 1. 사용자 입력값 받기
+
+            // 2. JSON 변환
+
+            // 3. API 요청
+
+            // 4. 응답 처리
+        }
+
+        
+
+        // updateForm 디자인
+        function renderUpdateForm() {
+            clear();
+            let dom = `
+                <form>
+                    <input type="text" value="1" readonly="true"><br>
+                    <input type="text" id="title" value="제목1"><br>
+                    <input type="text" id="content" value="내용1"><br>
+                    <input type="text" value="2024.11.22" readonly="true"><br>
+                    <button type="button" onclick="sendUpdate">글수정하기</button>
+                </form>
+            `;
+            root.innerHTML = dom;
+        }      
+
+        // 화면 초기화 (root객체 안 내용 비우기)
+        function clear() {
+            root.innerHTML = "";
+        }
+    </script>
+
+</body>
+
+</html>

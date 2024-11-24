@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>blog</title>
+    <style>
+        #box {
+            border: 1px solid black;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<section id="root">
+    <div>칼럼</div>
+
+    <div id="box">
+        <div>내용</div>
+        <div>내용</div>
+        <div>내용</div>
+    </div>
+        
+    <button onclick="add()">추가</button>
+
+</section>
+
+<script>
+    // init
+    let box = document.querySelector("#box");
+
+    function add(){
+        let item = document.createElement("div");
+        item.innerHTML = "11111";
+        
+        // box.after(item);
+        // box.before(item);
+        box.append(item);
+        // box.prepend(item);
+    }
+</script>
+
+</body>
+</html>
