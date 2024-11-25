@@ -27,13 +27,21 @@
     </section>
 
     <script>
+        // state
+        let state = {};
+        
         // init
         let root = document.querySelector("#root");
         renderList(); 
 
         // list 디자인 뼈대만 생성
-        function renderList() {
+        // render~ 메소드는 디자인
+        // 241125 선생님이 주신 코드로 교체
+        async function renderList() {
             clear();
+
+            let boards = await sendList2();
+
             let dom = `
                 <table border="1">
                     <thead>
@@ -44,12 +52,26 @@
                         </tr>
                     </thead>
                     <tbody id="list-box">
-                    
+                        ${boards.map(b => {
+                let temp = renderListItem2(b);
+                return temp;
+            })}
                     </tbody>
-                </table>                
+                </table>
             `;
             root.innerHTML = dom;
-            sendList();
+        }
+
+        // renderListItem 메소드에 방해되지않기위해 renderListItem2 메소드 생성해서 값 확인해보기
+        function renderListItem2(board) {
+            let dom = `
+                <tr>
+                    <td>${board.id}</td>
+                    <td>${board.title}</td>
+                    <td><a href="javascript:void(0);" onclick="renderDetail(${board.id})">상세보기</a></td>
+                </tr>
+            `;
+            return dom;
         }
 
         // item 생성
@@ -63,7 +85,8 @@
             item.innerHTML = dom;
             return item;            
         }
-        
+
+        // send~ 메소드는 통신
         async function sendList() {
             // 1. 사용자 입력값 받기 -> 필요 없다.
 
@@ -89,6 +112,7 @@
         async function renderDetail(id) {
             clear();
             let board = await sendDetail(id); // sendDetail이 async 함수니까 여기도 await 필요
+            state = board; // state변수로 옮기기 - 글 수정을 위함, 서버 끊겨도 값이 남아있도록
             let dom = `
                 <form>
                     <button type="button" onclick="sendDelete(${board.id})">삭제</button>
@@ -112,7 +136,7 @@
             // 2. JSON 변환
 
             // 3. API 요청
-            // ${id} 쓰려면 백틱 써야한다.
+            // ${id} 쓰려면(랜더링 하려면) 백틱 써야한다.
             let response = await fetch(`http://localhost:8080/api/board/${id}`);            
             let responseBody = await response.json();
             console.log(responseBody); 
@@ -135,48 +159,82 @@
             root.innerHTML = dom;
         }
 
-        function sendSave() {
+        async function sendSave() { 
             // 1. 사용자 입력값 받기
-
+            let board = {
+              title: document.querySelector("#title").value,
+              content: document.querySelector("#content").value  
+            };
+             
             // 2. JSON 변환
+            let requestBody = JSON.stringify(board); // js 오브젝트 -> json 문자열 변환
+            // console.log(requestBody);
 
             // 3. API 요청
+            // await 필요한 이유는 .json() 자체가 비동기 함수이기 때문
+            let response = await fetch("http://localhost:8080/api/board",{
+                method: "POST",
+                body: requestBody,
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8"
+                }
+            });
+            let responseBody = await response.json(); // json 문자열 -> js 오브젝트 변환
+            console.log(responseBody);
 
             // 4. 응답 처리
+            renderList(); // 그림만 바꿔끼워주기
         }
 
-        function sendDelete() {
+        async function sendDelete(id) {
+            // 1. API 요청
+            let response = fetch(`http://localhost:8080/api/board/${id}`,{
+                method: "delete"
+            });
+            let responseBody = (await response).json();
+            console.log(responseBody); // 귀찮아도 출력으로 꼭 확인하기(값이 정확하게 뜨는지가 제일 중요하니까)
+
+            // 2. 응답 처리
+            renderList(); // 그림 갈아끼우기
+        }
+
+        async function sendUpdate(id) {
             // 1. 사용자 입력값 받기
+            let board = {
+              title: document.querySelector("#title").value,
+              content: document.querySelector("#content").value
+            };
 
             // 2. JSON 변환
+            let requestBody = JSON.stringify(board);
 
             // 3. API 요청
+            let response = await fetch(`http://localhost:8080/api/board/${id}`,{
+                method: "PUT",
+                body: requestBody,
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8"
+                }
+            });
 
             // 4. 응답 처리
+            renderDetail(id); // 그림 바꿔끼우기, id를 매개변수로 갖고있어야함(주의)
+
         }
-
-        function sendUpdate() {
-            // 1. 사용자 입력값 받기
-
-            // 2. JSON 변환
-
-            // 3. API 요청
-
-            // 4. 응답 처리
-        }
-
-        
 
         // updateForm 디자인
         function renderUpdateForm() {
+            console.log("state", state);
             clear();
+
+            // form 태그 사용시 새로고침됨(날아감)
             let dom = `
                 <form>
-                    <input type="text" value="1" readonly="true"><br>
-                    <input type="text" id="title" value="제목1"><br>
-                    <input type="text" id="content" value="내용1"><br>
-                    <input type="text" value="2024.11.22" readonly="true"><br>
-                    <button type="button" onclick="sendUpdate">글수정하기</button>
+                    <input type="text" value="${state.id}" readonly="true"><br>
+                    <input type="text" id="title" value="${state.title}"><br>
+                    <input type="text" id="content" value="${state.content}"><br>
+                    <input type="text" value="${state.createdAt}" readonly="true"><br>
+                    <button type="button" onclick="sendUpdate(${state.id})">글수정하기</button>
                 </form>
             `;
             root.innerHTML = dom;
