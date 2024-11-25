@@ -22,7 +22,7 @@ public class BoardController {
     @GetMapping("/api")
     public Resp<?> list() {
         // Resp<?> extends Object -> 와일드 카드
-        List<BoardResponce.ReadDTO> boardList = boardService.게시글목록보기();
+        List<BoardResponce.DTO> boardList = boardService.게시글목록보기();
 
         return Resp.ok(boardList);
         // return Resp.ok(boardService.게시글목록보기()); 1줄도 가능
